@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<style>.mBot{margin-bottom:15px;}</style>
+</head>
+<body>
+<h3>Loan Repayments Caclulator</h3>
+<ul>
+<li>Uses the Math object and jQuery to solve the annuity formula</li>
+<li>Uses Bootstrap for styling</li>
+</ul>
+<form class="form col-sm-6">
+<div class="col-sm-5">
+<div class="form-group">
+	<label for="amount" class="control-label">Loan Amount ($):</label>
+	<div><input type='number' class="form-control" value=10000 min=1 id='amount'></div>
+</div>
+<div class="form-group">
+	<label for="rate" class="control-label">Interest Rate (%):</label>
+	<div><input type='number' class="form-control" value=1 min=1 id='rate'></div>
+</div>
+
+<div class="form-group">
+	<label for="term" class="control-label">Loan Term (Years):</label>
+	<div><input type="number" class="form-control" value=1 min=1 id="term"></div>
+</div>
+
+<div class="mBot" ><button type="button" class="btn btn-primary" onClick='calc()'>Calculate</button></div>
+<div><span id='answer' class="text-info"></span></div>
+
+</div>
+</form>
+
+
+
+
+<script>
+function calc(){
+  //Get inital values from user controls
+  loanAmt = $("#amount").val()
+  interestRate = $("#rate").val()
+  payments = $("#term").val()
+  errors = ""
+  if (loanAmt <= 0){
+	errors += "<li>The loan amount must be greater than zero</li>"
+  }
+  if (interestRate <= 0){
+	errors += "<li>The interest rate must be greater than zero</li>"
+  }
+ if (payments <= 0){
+	errors += "<li>The term length must be greater than zero</li>"
+  }
+  if (errors == ""){
+	  payments = payments * 12
+	  //Calculates monthly compound interest
+	  monthlyCompoundInterest = (interestRate/1200);
+	  //Calculates the amount to divide by
+	  rightSide = 1-(Math.pow((1+monthlyCompoundInterest),-payments))
+	  //Calculates the payment amount
+	  payment = (monthlyCompoundInterest*loanAmt) / rightSide
+	  //Round to the nearest 2 decimal places
+	  payment = Math.round(payment,2)
+	  $("#answer").html("Your monthly payment will be $"+payment)
+  }
+  else{
+	$("#answer").html("<div class='text-danger'><strong>Errors:</strong><ul>"+errors+"</ul></div>")
+  }
+}
+</script>
+
+</body>
+</html>
